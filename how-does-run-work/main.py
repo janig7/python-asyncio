@@ -9,11 +9,20 @@ async def main():
     print(f'{time.ctime()} Bye!')
 
 
+def blocking():
+    time.sleep(0.5)
+    print(f'{time.ctime()} Hello from thread!')
+
+
 if __name__ == '__main__':
 
     loop = asyncio.get_event_loop()
+
     task = loop.create_task(main())
+
+    loop.run_in_executor(None, blocking)
     loop.run_until_complete(task)
+
     pending = asyncio.all_tasks(loop=loop)
     for task in pending:
         task.cancel()
